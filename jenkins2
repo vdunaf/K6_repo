@@ -16,7 +16,7 @@ pipeline {
         stage('Run k6 test') {
             steps {
                  // Run k6 and generate JSON output
-                    bat 'k6 run --vus %VU1% --iterations %ITERATIONS% --duration %DURATION%s --out json=summary.json K6_scenarios\\.idea\\test4.js'
+                    bat 'k6 run --vus %VU1% --duration %DURATION%s --out json=summary.json K6_scenarios\\.idea\\test4.js'
                     
                     // Generate HTML report from JSON
                     bat 'k6 report --output K6_scenarios\\summary.html summary.json'
