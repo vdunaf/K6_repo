@@ -1,17 +1,14 @@
 pipeline {
     agent any
-     environment {
-        K6_PATH = "C:\\Program Files\\k6\\k6.exe"  // Specify the correct path to your k6 executable
-    }
        stages {
         stage('Verify k6') {
             steps {
-                bat "${K6_PATH} version"
+                bat 'k6 version'
             }
         }
         stage('Run k6 test') {
             steps {
-                bat '\'${K6_PATH}\' run --vus 2 -- iterations 5 --duration 30s .idea\\test4.js'
+                bat 'k6 run --vus 2 -- iterations 5 --duration 30s K6_scenarios\\.idea\\test4.js'
             }
         }
     }
