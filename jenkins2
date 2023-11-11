@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+       stages {
+        stage('Verify k6') {
+            steps {
+                bat "k6 version"
+            }
+        }
+        stage('Run k6 test') {
+            steps {
+                bat 'k6 run --vus 2 -- iterations 5 --duration 30s .idea\\test4.js'
+            }
+        }
+    }
+}
