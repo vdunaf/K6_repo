@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Run k6 test') {
             steps {
-                bat 'k6 run --vus 2 -- iterations 5 --duration 30s K6_scenarios\\.idea\\test4.js'
+                bat 'k6 run --vus 2 --iterations 5 --duration 30s K6_scenarios\\.idea\\test4.js'
             }
         }
     }
