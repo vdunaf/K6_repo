@@ -1,5 +1,12 @@
 pipeline {
     agent any
+	parameters {
+        choice choices: ['LoadTest', 'StressTest', 'EnduranceTest', 'BaselineTest', 'LoadTest_MainFlows', 'ScriptVerification_SmokeTest'], description: 'Type of Test To Be Executed', name: 'Type_of_API_test'
+        string defaultValue: '1', description: 'Number of virtual users', name: 'VU1'
+        string defaultValue: '60', description: 'Duration(seconds)', name: 'DURATION'
+		string defaultValue: '2', description: 'Iterations', name: 'ITERATIONS'
+		}
+		
        stages {
         stage('Verify k6') {
             steps {
@@ -8,7 +15,34 @@ pipeline {
         }
         stage('Run k6 test') {
             steps {
-                bat 'k6 run --vus 4 --iterations 10 --duration 5m K6_scenarios\\.idea\\test4.js'
+                 // Run k6 and generate JSON output
+                    bat 'k6 run --vus %VU1% --iterations %ITERATIONS% --duration %DURATION%s --out json=summary.json K6_scenarios\\.idea\\test4.js'
+                    
+                    // Generate HTML report from JSON
+                    bat 'k6 report --output K6_scenarios\\summary.html summary.json'
+            }
+        }
+		stage('Publish HTML Report') {
+            steps {
+                script {
+                // reportName variable
+                def reportName = params.Type_of_API_test
+                // Thread variable
+                def VU1 = params.VU1
+                // Get the current timestamp in milliseconds
+                def timestamp = currentBuild.getTimeInMillis()
+                // Format the timestamp into a human-readable date
+                def formattedTimestamp = new Date(timestamp).format('yyyy-MM-dd HH:mm:ss')
+                 // Publish the HTML report
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'K6_scenarios',
+                    reportFiles: 'summary.html', // Specify the main HTML file to display
+                    reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
+                ])
+            }
             }
         }
     }
