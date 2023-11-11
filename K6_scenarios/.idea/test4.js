@@ -11,8 +11,8 @@ import { randomIntBetween,
   uuidv4,
   findBetween } from "https://jslib.k6.io/k6-utils/1.1.0/index.js";
 import {HomePage} from "../pages/home_page.js";
-import {Login} from "../pages/login_form.js";
-import {LoginUser} from "../pages/login_user1.js";
+//import {Login} from "../pages/login_form.js";
+//import {LoginUser} from "../pages/login_user1.js";
 import {OpenCategory} from "../pages/open_category.js";
 import {OpenProduct} from "../pages/select_product.js";
 import {AddToCart} from "../pages/add_to_cart.js";
