@@ -19,7 +19,7 @@ pipeline {
                     bat 'k6 run --vus %VU1% --duration %DURATION%s -o json=summaryy.json K6_scenarios\\.idea\\test4.js'
                 //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
                     // Generate HTML report from JSON
-                   bat 'k6 report -o summaryy.html summary.json'
+                   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
 		stage('Publish HTML Report') {
