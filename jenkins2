@@ -14,15 +14,7 @@ pipeline {
                 bat 'k6 version'
             }
         }
-	 stage('Run k6 test') {
-            matrix {
-                axes {
-                    axis {
-                        name 'SCENARIO'
-                        values 'test5.js', 'test4.js'
-                    }
-                }
-        stage('Run k6 test') {
+	     stage('Run k6 test') {
             steps {
                  // Run k6 and generate JSON output
                    // bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\%scenario%'
@@ -32,9 +24,6 @@ pipeline {
                 //   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
-	}
-}
-
 		stage('Publish HTML Report') {
             steps {
                 script {
