@@ -1,5 +1,12 @@
 pipeline {
     agent any
+	parameters {
+        choice choices: ['LoadTest', 'StressTest', 'EnduranceTest', 'BaselineTest', 'LoadTest_MainFlows', 'ScriptVerification_SmokeTest'], description: 'Type of Test To Be Executed', name: 'Type_of_API_test'
+        string defaultValue: '1', description: 'Number of virtual users', name: 'VU1'
+        string defaultValue: '60', description: 'Duration(seconds)', name: 'DURATION'
+	string defaultValue: '1', description: 'Iterations', name: 'ITERATIONS'
+		}
+		
        stages {
         stage('Verify k6') {
             steps {
@@ -8,7 +15,47 @@ pipeline {
         }
         stage('Run k6 test') {
             steps {
-                bat 'k6 run --vus 4 --iterations 10 --duration 5m K6_scenarios\\.idea\\test4.js'
+                 // Run k6 and generate JSON output
+                    bat 'k6 run --vus %VU1% --duration %DURATION%s -o json=summaryy.json K6_scenarios\\.idea\\test4.js'
+                //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
+                    // Generate HTML report from JSON
+                  // bat 'k6 report -o summaryy.html summaryy.json'
+            }
+        }
+	stage('Install k6-html-reporter') {
+            steps {
+                bat 'npm install -g k6-html-reporter'
+            }
+        }
+	stage('Generate HTML Report') {
+            steps {
+                // Generate HTML report from JSON
+                script {
+                    bat 'k6-html-reporter -name "My Test" -summaryy summaryy.json'
+                }
+            }
+        }
+		stage('Publish HTML Report') {
+            steps {
+                script {
+                // reportName variable
+                def reportName = params.Type_of_API_test
+                // Thread variable
+                def VU1 = params.VU1
+                // Get the current timestamp in milliseconds
+                def timestamp = currentBuild.getTimeInMillis()
+                // Format the timestamp into a human-readable date
+                def formattedTimestamp = new Date(timestamp).format('yyyy-MM-dd HH:mm:ss')
+                 // Publish the HTML report
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'k6-html-report',
+                    reportFiles: 'summaryy.html', // Specify the main HTML file to display
+                    reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
+                ])
+            }
             }
         }
     }
