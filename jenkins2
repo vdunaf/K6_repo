@@ -16,10 +16,10 @@ pipeline {
         stage('Run k6 test') {
             steps {
                  // Run k6 and generate JSON output
-                    bat 'k6 run --vus %VU1% --duration %DURATION%s -o json=summaryy.json K6_scenarios\\.idea\\test4.js'
+                    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
                 //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
                     // Generate HTML report from JSON
-                   bat 'k6 report -o summaryy.html summaryy.json'
+                //   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
 	
@@ -40,7 +40,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: '.',
-                    reportFiles: 'summaryy.html', // Specify the main HTML file to display
+                    reportFiles: 'summary.html', // Specify the main HTML file to display
                     reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
                 ])
             }
