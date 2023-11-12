@@ -4,7 +4,7 @@ pipeline {
         choice choices: ['LoadTest', 'StressTest', 'EnduranceTest', 'BaselineTest', 'LoadTest_MainFlows', 'ScriptVerification_SmokeTest'], description: 'Type of Test To Be Executed', name: 'Type_of_API_test'
         string defaultValue: '1', description: 'Number of virtual users', name: 'VU1'
         string defaultValue: '60', description: 'Duration(seconds)', name: 'DURATION'
-		string defaultValue: '2', description: 'Iterations', name: 'ITERATIONS'
+	string defaultValue: '1', description: 'Iterations', name: 'ITERATIONS'
 		}
 		
        stages {
@@ -16,10 +16,10 @@ pipeline {
         stage('Run k6 test') {
             steps {
                  // Run k6 and generate JSON output
-                  //  bat 'k6 run --vus %VU1% --duration %DURATION%s -o json=summary.json K6_scenarios\\.idea\\test4.js'
-                    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
+                    bat 'k6 run --vus %VU1% --duration %DURATION%s -o json=summaryy.json K6_scenarios\\.idea\\test4.js'
+                //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
                     // Generate HTML report from JSON
-                   // bat 'k6 report -o summary.html summary.json'
+                   bat 'k6 report -o summaryy.html summary.json'
             }
         }
 		stage('Publish HTML Report') {
@@ -39,7 +39,7 @@ pipeline {
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
                     reportDir: '.',
-                    reportFiles: 'summary.html', // Specify the main HTML file to display
+                    reportFiles: 'summaryy.html', // Specify the main HTML file to display
                     reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
                 ])
             }
