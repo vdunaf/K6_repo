@@ -38,7 +38,7 @@ pipeline {
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'k6_run',
+                    reportDir: '.',
                     reportFiles: 'summary.html', // Specify the main HTML file to display
                     reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
                 ])
