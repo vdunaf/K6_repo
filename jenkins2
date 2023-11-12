@@ -22,6 +22,11 @@ pipeline {
                   // bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
+	stage('Install k6-html-reporter') {
+            steps {
+                bat 'npm install -g k6-html-reporter'
+            }
+        }
 	stage('Generate HTML Report') {
             steps {
                 // Generate HTML report from JSON
