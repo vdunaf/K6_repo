@@ -6,7 +6,7 @@ import papaparse from 'https://jslib.k6.io/papaparse/5.1.1/index.js';
 import { SharedArray } from 'k6/data';
 import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 import {HomePage} from "../pages/home_page.js";
-import {Login} from "../pages/login_form.js";
+//import {Login} from "../pages/login_form.js";
 import {OpenCategory} from "../pages/open_category.js";
 import {OpenProduct} from "../pages/select_product.js";
 import {AddToWishList} from "../pages/add_to_wishlist.js";
