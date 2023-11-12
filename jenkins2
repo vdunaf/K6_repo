@@ -19,22 +19,10 @@ pipeline {
                     bat 'k6 run --vus %VU1% --duration %DURATION%s -o json=summaryy.json K6_scenarios\\.idea\\test4.js'
                 //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
                     // Generate HTML report from JSON
-                  // bat 'k6 report -o summaryy.html summaryy.json'
+                   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
-	stage('Install k6-html-reporter') {
-            steps {
-                bat 'npm install -g k6-html-reporter'
-            }
-        }
-	stage('Generate HTML Report') {
-            steps {
-                // Generate HTML report from JSON
-                script {
-                    bat 'k6-html-reporter -name "My Test" -summaryy summaryy.json'
-                }
-            }
-        }
+	
 		stage('Publish HTML Report') {
             steps {
                 script {
@@ -51,7 +39,7 @@ pipeline {
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'k6-html-report',
+                    reportDir: '.',
                     reportFiles: 'summaryy.html', // Specify the main HTML file to display
                     reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
                 ])
