@@ -33,7 +33,7 @@ pipeline {
             def dotnet = tool 'dotnet'
 
             // Download Puppeteer-Sharp DLL
-            bat "${dotnet} add package PuppeteerSharp --version 2.0.4 --package-directory .\\packages"
+            bat "${dotnet} add package PuppeteerSharp --version 7.0.13 --package-directory .\\packages"
 
             writeFile file: 'capture.cs', text: """
                 using PuppeteerSharp;
