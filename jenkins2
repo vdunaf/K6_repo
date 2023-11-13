@@ -29,19 +29,28 @@ pipeline {
                 script {
                     def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
 
-                    writeFile file: 'capture.js', text: """
-                        const puppeteer = require('puppeteer-sharp');
+                    // Download Puppeteer-Sharp DLL
+                    bat 'dotnet add package PuppeteerSharp --version 2.0.4 --package-directory .\\packages'
 
-                        (async () => {
-                            const browser = await puppeteer.launch();
-                            const page = await browser.NewPageAsync();
-                            await page.GoToAsync('${grafanaUrl}');
-                            await page.ScreenshotAsync('grafana_screenshot.png');
-                            await browser.CloseAsync();
-                        })();
+                    writeFile file: 'capture.cs', text: """
+                        using PuppeteerSharp;
+
+                        class Program
+                        {
+                            static async Task Main()
+                            {
+                                var browser = await Puppeteer.LaunchAsync();
+                                var page = await browser.NewPageAsync();
+                                await page.GoToAsync('${grafanaUrl}');
+                                await page.ScreenshotAsync('grafana_screenshot.png');
+                                await browser.CloseAsync();
+                            }
+                        }
                     """
 
-                    bat 'dotnet puppeteer.dll capture.js'
+                    // Compile and run the capture script
+                    bat 'dotnet build'
+                    bat 'dotnet run'
                 }
             }
         }
