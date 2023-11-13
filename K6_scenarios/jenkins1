@@ -4,7 +4,8 @@ pipeline {
         choice choices: ['LoadTest', 'StressTest', 'EnduranceTest', 'BaselineTest', 'LoadTest_MainFlows', 'ScriptVerification_SmokeTest'], description: 'Type of Test To Be Executed', name: 'Type_of_API_test'
         string defaultValue: '1', description: 'Number of virtual users', name: 'VU1'
         string defaultValue: '60', description: 'Duration(seconds)', name: 'DURATION'
-	string defaultValue: '1', description: 'Iterations', name: 'ITERATIONS'
+	//string defaultValue: '1', description: 'Iterations', name: 'ITERATIONS'
+	choice(choices: ['test5.js', 'test4.js'], description: 'Select a test', name: 'scenario')
 		}
 		
        stages {
@@ -13,26 +14,14 @@ pipeline {
                 bat 'k6 version'
             }
         }
-        stage('Run k6 test') {
+	     stage('Run k6 test') {
             steps {
                  // Run k6 and generate JSON output
-                    bat 'k6 run --vus %VU1% --duration %DURATION%s -o json=summaryy.json K6_scenarios\\.idea\\test4.js'
+                 //   bat 'k6 run --vus %VU1% --duration %DURATION%s --out influxdb=http://localhost:8086/mydb K6_scenarios\\.idea\\%scenario%'
+		bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\%scenario%'
                 //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
                     // Generate HTML report from JSON
-                  // bat 'k6 report -o summaryy.html summaryy.json'
-            }
-        }
-	stage('Install k6-html-reporter') {
-            steps {
-                bat 'npm install -g k6-html-reporter'
-            }
-        }
-	stage('Generate HTML Report') {
-            steps {
-                // Generate HTML report from JSON
-                script {
-                    bat 'k6-html-reporter -name "My Test" -summaryy summaryy.json'
-                }
+                //   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
 		stage('Publish HTML Report') {
@@ -51,8 +40,8 @@ pipeline {
                     allowMissing: true,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'k6-html-report',
-                    reportFiles: 'summaryy.html', // Specify the main HTML file to display
+                    reportDir: '.',
+                    reportFiles: 'summary.html', // Specify the main HTML file to display
                     reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
                 ])
             }
