@@ -42,20 +42,6 @@ thresholds: {http_req_failed: ['rate<0.02'], // http errors should be less than 
                //maxDuration: '60s',
    };
 
-//  scenarios: {
-//    Scenario_2: {
-//      executor: 'ramping-vus',
-//      gracefulStop: '30s',
-//      stages: [
-//        { target: 2, duration: '15s' },
-//        { target: 5, duration: '2m30s' },
-//        { target: 0, duration: '30s' },
-//      ],
-//      gracefulRampDown: '30s',
-//      exec: 'Scenario_2',
-//    },
-//  },
-//}
 // Load CSV file and parse it using Papa Parse
 const accounts = new SharedArray('accounts', function () {
   return papaparse.parse(open('./accounts.csv'), { header: true }).data;
@@ -66,10 +52,6 @@ const accounts = new SharedArray('accounts', function () {
 export default function (){
 // Define the vars object here
     const vars = {};
-
-// Select a random user from the CSV
-//      const randomUser = accounts[Math.floor(Math.random() * accounts.length)];
-//      console.log('Random user: ', JSON.stringify(randomUser));
 
 // Select a random user from the CSV, skipping the header
     const randomUserIndex = Math.floor(Math.random() * (accounts.length - 1)) + 1;
@@ -90,10 +72,6 @@ const selectedCategory1 = category1[0];
 
 console.log(`Selected category ID: ${selectedCategory1}`);
 // Login to OpenCart
-// Login();
-//  console.log(username);
-//   LoginUser(randomUser);
-
   LoginUser3(randomUser);
 // Open a Category
   OpenCategory(selectedCategory1, vars);
