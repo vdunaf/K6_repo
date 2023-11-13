@@ -28,55 +28,14 @@ export const options = {
                maxDuration: '60s',
    };
 
-//  scenarios: {
-//    Scenario_1: {
-//      executor: 'ramping-vus',
-//      gracefulStop: '30s',
-//      stages: [
-//        { target: 2, duration: '20s' },
-//        { target: 4, duration: '1m' },
-//        { target: 0, duration: '10s' },
-//      ],
-//      gracefulRampDown: '30s',
-//      exec: 'default',
-//    },
-//  },
-//}
 // Load CSV file and parse it using Papa Parse
     const accounts = new SharedArray('accounts', function () {
   return papaparse.parse(open('./accounts.csv'), { header: true }).data;
  });
 
-//export default function () {
-//const vars = {};
-//
-// // Select a random user from the CSV
-//       const randomUser = accounts[Math.floor(Math.random() * accounts.length)];
-//       console.log('Random user: ', JSON.stringify(randomUser));
-//
-//       }
-
-//export function scenario_1() {
-//export default function () {
-//// Define the vars object here
-//    const vars = {};
-//
-//// Select a random user from the CSV
-//       const randomUser = accounts[Math.floor(Math.random() * accounts.length)];
-//       console.log('Random user: ', JSON.stringify(randomUser));
-//
-//  //HomePage();
-//  const homePageResponse = HomePage();
-//  const match = new RegExp('category&amp;path=(17|18|24|34)"').exec(homePageResponse.body);
-//  const category1 = match ? match[1] || match[0] : null;
-
 export default function (){
 // Define the vars object here
     const vars = {};
-
-// Select a random user from the CSV
-//      const randomUser = accounts[Math.floor(Math.random() * accounts.length)];
-//      console.log('Random user: ', JSON.stringify(randomUser));
 
 // Select a random user from the CSV, skipping the header
     const randomUserIndex = Math.floor(Math.random() * (accounts.length - 1)) + 1;
@@ -99,10 +58,6 @@ console.log(`Selected category ID: ${selectedCategory1}`);
 
 
 // Login to OpenCart
-// Login();
-//  console.log(username);
-//   LoginUser(randomUser);
-
   LoginUser3(randomUser);
 
   OpenCategory(selectedCategory1, vars);
