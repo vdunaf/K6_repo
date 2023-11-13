@@ -25,13 +25,15 @@ pipeline {
             }
         }
 	stage('Capture Grafana Screenshot') {
-    	steps {
-        	script {
-            	def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
+    steps {
+        script {
+            def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
+
+            // Use the configured .NET SDK tool
+            def dotnet = tool 'dotnet'
 
             // Download Puppeteer-Sharp DLL
-            bat 'dotnet restore'
-            bat 'dotnet add package PuppeteerSharp --version 7.0.403 --package-directory .\\packages'
+            bat "${dotnet} add package PuppeteerSharp --version 2.0.4 --package-directory .\\packages"
 
             writeFile file: 'capture.cs', text: """
                 using PuppeteerSharp;
@@ -50,8 +52,8 @@ pipeline {
             """
 
             // Compile and run the capture script
-            bat 'dotnet build'
-            bat 'dotnet run'
+            bat "${dotnet} build"
+            bat "${dotnet} run"
         }
     }
 }
