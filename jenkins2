@@ -18,7 +18,7 @@ pipeline {
             steps {
                  // Run k6 and generate JSON output
                  //   bat 'k6 run --vus %VU1% --duration %DURATION%s --out influxdb=http://localhost:8086/mydb K6_scenarios\\.idea\\%scenario%'
-		    bat 'k6 run --vus ${VU1} --duration ${DURATION}s K6_scenarios\\.idea\\%scenario%'
+		bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\%scenario%'
                 //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
                     // Generate HTML report from JSON
                 //   bat 'k6 report -o summaryy.html summaryy.json'
