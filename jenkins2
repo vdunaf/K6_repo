@@ -24,6 +24,27 @@ pipeline {
                 //   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
+	stage('Capture Grafana Screenshot') {
+            steps {
+                script {
+                    def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
+
+                    writeFile file: 'capture.js', text: """
+                        const puppeteer = require('puppeteer-sharp');
+
+                        (async () => {
+                            const browser = await puppeteer.launch();
+                            const page = await browser.NewPageAsync();
+                            await page.GoToAsync('${grafanaUrl}');
+                            await page.ScreenshotAsync('grafana_screenshot.png');
+                            await browser.CloseAsync();
+                        })();
+                    """
+
+                    bat 'dotnet puppeteer.dll capture.js'
+                }
+            }
+        }
 		stage('Publish HTML Report') {
             steps {
                 script {
@@ -44,6 +65,8 @@ pipeline {
                     reportFiles: 'summary.html', // Specify the main HTML file to display
                     reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
                 ])
+		// Archive the Grafana screenshot as a Jenkins artifact
+                    archiveArtifacts artifacts: 'grafana_screenshot.png', onlyIfSuccessful: false
             }
             }
         }
