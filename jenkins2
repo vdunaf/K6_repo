@@ -29,11 +29,11 @@ pipeline {
         script {
             def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
 
-            // Use the configured .NET SDK tool
-            def dotnet = tool 'dotnet'
+            // Full path to dotnet executable
+            def dotnetPath = 'C:\\ProgramData\\Jenkins\\.jenkins\\tools\\io.jenkins.plugins.dotnet.DotNetSDK\\dotnet'
 
             // Download Puppeteer-Sharp DLL
-            bat "${dotnet} add package PuppeteerSharp --version 7.0.13 --package-directory .\\packages"
+            bat "${dotnetPath} add package PuppeteerSharp --version 7.0.13 --package-directory .\\packages"
 
             writeFile file: 'capture.cs', text: """
                 using PuppeteerSharp;
@@ -52,8 +52,8 @@ pipeline {
             """
 
             // Compile and run the capture script
-            bat "${dotnet} build"
-            bat "${dotnet} run"
+            bat "${dotnetPath} build"
+            bat "${dotnetPath} run"
         }
     }
 }
