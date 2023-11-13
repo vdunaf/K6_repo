@@ -25,35 +25,36 @@ pipeline {
             }
         }
 	stage('Capture Grafana Screenshot') {
-            steps {
-                script {
-                    def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
+    	steps {
+        	script {
+            	def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
 
-                    // Download Puppeteer-Sharp DLL
-                    bat 'dotnet add package PuppeteerSharp --version 2.0.4 --package-directory .\\packages'
+            // Download Puppeteer-Sharp DLL
+            bat 'dotnet restore'
+            bat 'dotnet add package PuppeteerSharp --version 7.0.403 --package-directory .\\packages'
 
-                    writeFile file: 'capture.cs', text: """
-                        using PuppeteerSharp;
+            writeFile file: 'capture.cs', text: """
+                using PuppeteerSharp;
 
-                        class Program
-                        {
-                            static async Task Main()
-                            {
-                                var browser = await Puppeteer.LaunchAsync();
-                                var page = await browser.NewPageAsync();
-                                await page.GoToAsync('${grafanaUrl}');
-                                await page.ScreenshotAsync('grafana_screenshot.png');
-                                await browser.CloseAsync();
-                            }
-                        }
-                    """
-
-                    // Compile and run the capture script
-                    bat 'dotnet build'
-                    bat 'dotnet run'
+                class Program
+                {
+                    static async Task Main()
+                    {
+                        var browser = await Puppeteer.LaunchAsync();
+                        var page = await browser.NewPageAsync();
+                        await page.GoToAsync('${grafanaUrl}');
+                        await page.ScreenshotAsync('grafana_screenshot.png');
+                        await browser.CloseAsync();
+                    }
                 }
-            }
+            """
+
+            // Compile and run the capture script
+            bat 'dotnet build'
+            bat 'dotnet run'
         }
+    }
+}
 		stage('Publish HTML Report') {
             steps {
                 script {
