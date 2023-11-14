@@ -74,7 +74,9 @@ pipeline {
        //     currentBuild.setDescription(sb.toString())
 
 	// set build description with HTML
-            currentBuild.setDescription("<a href='${perfResult}'>Grafana Performance Result</a>")
+        //    currentBuild.setDescription("<a href='${perfResult}'>Grafana Performance Result</a>")
+// print the link in the build log
+            echo "Grafana Performance Result: ${perfResult}"
 					}
 					}
 					}
