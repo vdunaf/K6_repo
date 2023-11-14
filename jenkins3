@@ -66,13 +66,13 @@ pipeline {
            // jmxMonitor = String.format(jmxMonitor, start, end)
 
             // build the string to be added as description.
-        //    def link = "<a href='%s'>Grafana Performance Result</a><br/>"
-       //     def sb = new StringBuilder()
-       //     sb.append(String.format(link, perfResult))
+            def link = "<a href='%s'>Grafana Performance Result</a><br/>"
+            def sb = new StringBuilder()
+            sb.append(String.format(link, perfResult))
 
             // set build description
-            currentBuild.setDescription("Grafana Dashboard= ${perfResult}")
-	 //currentBuild.setDescription(sb.toString())
+          //  currentBuild.setDescription("Grafana Dashboard= ${perfResult}")
+	 currentBuild.setDescription(sb.toString())
 					}
 					}
 					}
