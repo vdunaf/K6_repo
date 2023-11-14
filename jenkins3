@@ -24,6 +24,35 @@ pipeline {
                 //   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
+
+        stage('Publish HTML Report') {
+            steps {
+                script {
+                    // reportName variable
+                    def reportName = params.Type_of_API_test
+                    // Thread variable
+                    def VU1 = params.VU1
+                    // Get the current timestamp in milliseconds
+                    def timestamp = currentBuild.getTimeInMillis()
+                    // Format the timestamp into a human-readable date
+                    def formattedTimestamp = new Date(timestamp).format('yyyy-MM-dd HH:mm:ss')
+
+                    // Archive the HTML file for later access
+                    archiveArtifacts artifacts: 'grafana_link.html', onlyIfSuccessful: true
+
+                    // Publish the HTML report
+                    publishHTML(target: [
+                        allowMissing: true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: '.',
+                        reportFiles: 'summary.html', // Specify the main HTML file to display
+                        reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
+                    ])
+                }
+            }
+        }
+
 stage('Grafana Dashboard Links') {
             steps {
                 script {
@@ -45,32 +74,23 @@ stage('Grafana Dashboard Links') {
                 }
             }
         }
-	
-		stage('Publish HTML Report') {
-            steps {
-                script {
-                // reportName variable
-                def reportName = params.Type_of_API_test
-                // Thread variable
-                def VU1 = params.VU1
-                // Get the current timestamp in milliseconds
-                def timestamp = currentBuild.getTimeInMillis()
-                // Format the timestamp into a human-readable date
-                def formattedTimestamp = new Date(timestamp).format('yyyy-MM-dd HH:mm:ss')
-                 // Publish the HTML report
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: '.',
-                    reportFiles: 'summary.html', // Specify the main HTML file to display
-                    reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
-		    link: env.GRAFANA_LINK // Use the environment variable for the link
-                ])
-		
-            }
-            }
+    }
+
+    post {
+        always {
+            // Publish HTML report with a link to Grafana
+            publishHTML(
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: '.',
+                reportFiles: 'summary.html', // Specify the main HTML file to display
+                reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users",
+                link: env.GRAFANA_LINK // Use the environment variable for the link
+            )
         }
+    }
+}
 		
 		
     }
