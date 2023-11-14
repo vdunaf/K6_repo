@@ -70,7 +70,7 @@ stage('Grafana Dashboard Links') {
                     echo "Grafana Performance Result: ${perfResult}"
 
                     // Set the link as an environment variable for the HTML Publisher Plugin
-                    env.GRAFANA_LINK = perfResult
+                    env.GRAFANA_LINK = ${perfResult}
                 }
             }
         }
@@ -86,7 +86,7 @@ stage('Grafana Dashboard Links') {
                 reportDir: '.',
                 reportFiles: 'summary.html', // Specify the main HTML file to display
                 reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users",
-                linkHTML: env.GRAFANA_LINK // Use the environment variable for the link
+                link: env.GRAFANA_LINK // Use the environment variable for the link
             )
         }
     }
