@@ -71,7 +71,7 @@ pipeline {
        //     sb.append(String.format(link, perfResult))
 
             // set build description
-            currentBuild.setDescription("[Grafana Dashboard=](${perfResult})")
+            // currentBuild.setDescription("Grafana Dashboard= ${perfResult}")
 					}
 					}
 					}
