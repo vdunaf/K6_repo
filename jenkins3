@@ -54,8 +54,8 @@ pipeline {
     	steps {
         script {
             // grafana url for aggregate dashboard - replace time stamp with %s
-            def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-env=&var-name=&from=%d&to=%d"
-            def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
+            def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
+            //def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
 
             // get build start and end time
             def start = currentBuild.startTimeInMillis
@@ -63,13 +63,13 @@ pipeline {
 
             // replace time
             perfResult = String.format(perfResult, start, end)
-            jmxMonitor = String.format(jmxMonitor, start, end)
+           // jmxMonitor = String.format(jmxMonitor, start, end)
 
             // build the string to be added as description.
             def link = "<a href='%s'>%s</a><br/>"
             def sb = new StringBuilder()
             sb.append(String.format(link, perfResult, "Grafana Performance Result"))
-              .append(String.format(link, jmxMonitor, "Grafana JMX Result"))
+             // .append(String.format(link, jmxMonitor, "Grafana JMX Result"))
 
             // set build description
             currentBuild.setDescription(sb.toString())
