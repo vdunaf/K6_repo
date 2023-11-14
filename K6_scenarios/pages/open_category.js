@@ -29,10 +29,6 @@ group(
       })
       check(response, { 'status equals 200': response => response.status.toString() === '200' })
 
-//       match = new RegExp('category&amp;path=(17|24|34)"').exec(response.body)
-
-//                  vars['category1'] = match ? match[1] || match[0] : null
-
       match = new RegExp('product_id=(.+?)">').exec(response.body)
       vars['product1'] = match ? match[1] || match[0] : null
 
