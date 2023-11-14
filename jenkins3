@@ -51,31 +51,28 @@ pipeline {
         }
 		
 		stage('Set Grafana Dashboard Links') {
-            steps {
-                script {
-                    // get current build
-                    def build = Thread.currentThread().executable
+    	steps {
+        script {
+            // grafana url for aggregate dashboard - replace time stamp with %s
+            def perfResult = "http://172.23.176.156:3000/dashboard/db/run-time-aggregate?from=%s&to=%s"
+            def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
 
-                    // grafana url for aggregate dashboard - replace time stamp with %s
-                    def perfResult = "http://172.23.176.156:3000//dashboard/db/run-time-aggregate?from=%s&to=%s"
-                    def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
+            // get build start and end time
+            def start = currentBuild.startTimeInMillis
+            def end = start + currentBuild.duration
 
-                    // get build start and end time
-                    def start = build.getStartTimeInMillis();
-                    def end = start + build.getExecutor().getElapsedTime();
+            // replace time
+            perfResult = String.format(perfResult, start, end)
+            jmxMonitor = String.format(jmxMonitor, start, end)
 
-                    // replace time
-                    perfResult = String.format(perfResult, start, end);
-                    jmxMonitor = String.format(jmxMonitor, start, end);
+            // build the string to be added as description.
+            def link = "<a href='%s'>%s</a><br/>"
+            def sb = new StringBuilder()
+            sb.append(String.format(link, perfResult, "Grafana Performance Result"))
+              .append(String.format(link, jmxMonitor, "Grafana JMX Result"))
 
-                    // build the string to be added as description.
-                    def link = "<a href='%s'>%s</a><br/>";
-                    def sb = new StringBuilder();
-                    sb.append(String.format(link, perfResult, "Grafana Performance Result"))
-                      .append(String.format(link, jmxMonitor, "Grafana JMX Result"));
-
-                    // set build description
-                    build.setDescription(sb.toString());
+            // set build description
+            currentBuild.setDescription(sb.toString())
 					}
 					}
 					}
