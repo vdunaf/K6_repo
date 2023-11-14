@@ -24,90 +24,56 @@ pipeline {
                 //   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
-
-        stage('Publish HTML Report') {
+	
+		stage('Publish HTML Report') {
             steps {
                 script {
-                    // reportName variable
-                    def reportName = params.Type_of_API_test
-                    // Thread variable
-                    def VU1 = params.VU1
-                    // Get the current timestamp in milliseconds
-                    def timestamp = currentBuild.getTimeInMillis()
-                    // Format the timestamp into a human-readable date
-                    def formattedTimestamp = new Date(timestamp).format('yyyy-MM-dd HH:mm:ss')
-
-                    // Archive the HTML file for later access
-                    archiveArtifacts artifacts: 'grafana_link.html', onlyIfSuccessful: true
-
-                    // Publish the HTML report
-                    publishHTML(target: [
-                        allowMissing: true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll: true,
-                        reportDir: '.',
-                        reportFiles: 'summary.html', // Specify the main HTML file to display
-                        reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
-                    ])
-                }
-            }
-        }
-
-stage('Grafana Dashboard Links') {
-            steps {
-                script {
-                    // grafana url for aggregate dashboard - replace time stamp with %s
-                    def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
-                    
-                    // get build start and end time
-                    def start = currentBuild.startTimeInMillis
-                    def end = start + currentBuild.duration
-
-                    // replace time
-                    perfResult = String.format(perfResult, start, end)
-
-                    // Print the link in the build log
-                    echo "Grafana Performance Result: ${perfResult}"
-
-                    // Set the link as an environment variable for the HTML Publisher Plugin
-                    env.GRAFANA_LINK = perfResult
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-		steps {
-                script {
-                    // grafana url for aggregate dashboard - replace time stamp with %s
-                    def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
-                    
-                    // get build start and end time
-                    def start = currentBuild.startTimeInMillis
-                    def end = start + currentBuild.duration
-
-                    // replace time
-                    perfResult = String.format(perfResult, start, end)
-
-                    // Print the link in the build log
-                    echo "Grafana Performance Result: ${perfResult}"
-
-                    // Set the link as an environment variable for the HTML Publisher Plugin
-                    env.GRAFANA_LINK = perfResult
-            // Publish HTML report with a link to Grafana
-            publishHTML(
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: '.',
-                reportFiles: 'summary.html', // Specify the main HTML file to display
-                reportName: "Grafana Dashboard ${perfResult}for current build",
-
-            )
-        }
-    }
-}
+                // reportName variable
+                def reportName = params.Type_of_API_test
+                // Thread variable
+                def VU1 = params.VU1
+                // Get the current timestamp in milliseconds
+                def timestamp = currentBuild.getTimeInMillis()
+                // Format the timestamp into a human-readable date
+                def formattedTimestamp = new Date(timestamp).format('yyyy-MM-dd HH:mm:ss')
+                 // Publish the HTML report
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: '.',
+                    reportFiles: 'summary.html', // Specify the main HTML file to display
+                    reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
+                ])
 		
-}
+            }
+            }
+        }
+		
+		stage('Grafana Dashboard Links') {
+    	steps {
+        script {
+            // grafana url for aggregate dashboard - replace time stamp with %s
+            def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
+            //def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
+
+            // get build start and end time
+            def start = currentBuild.startTimeInMillis
+            def end = start + currentBuild.duration
+
+            // replace time
+            perfResult = String.format(perfResult, start, end)
+           // jmxMonitor = String.format(jmxMonitor, start, end)
+
+            // build the string to be added as description.
+            def link = "<a href='%s'>Grafana Performance Result</a><br/>"
+            def sb = new StringBuilder()
+            sb.append(String.format(link, perfResult))
+
+            // set build description
+            currentBuild.setDescription(sb.toString())
+					}
+					}
+					}
+    }
 }
