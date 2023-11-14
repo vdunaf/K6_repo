@@ -44,11 +44,6 @@ group(
         },
       })
       check(response, { 'status equals 200': response => response.status.toString() === '200' })
-
-      match = new RegExp('category&amp;path=(17|24|34)"').exec(response.body)
-
-      vars['category'] = match ? match[1] || match[0] : null
-
       sleep(3.8)
       }
       );
