@@ -3,7 +3,7 @@ pipeline {
 	parameters {
         choice choices: ['LoadTest', 'StressTest', 'EnduranceTest', 'BaselineTest', 'LoadTest_MainFlows', 'ScriptVerification_SmokeTest'], description: 'Type of Test To Be Executed', name: 'Type_of_API_test'
         string defaultValue: '1', description: 'Number of virtual users', name: 'VU1'
-        string defaultValue: '60', description: 'Duration(seconds)', name: 'DURATION'
+        string defaultValue: '30', description: 'Duration(seconds)', name: 'DURATION'
 	//string defaultValue: '1', description: 'Iterations', name: 'ITERATIONS'
 	choice(choices: ['test5.js', 'test4.js'], description: 'Select a test', name: 'scenario')
 		}
@@ -24,39 +24,7 @@ pipeline {
                 //   bat 'k6 report -o summaryy.html summaryy.json'
             }
         }
-	stage('Capture Grafana Screenshot') {
-    steps {
-        script {
-            def grafanaUrl = 'http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=now-30m&to=now'
-
-            // Full path to dotnet executable
-            def dotnetPath = 'C:\\ProgramData\\Jenkins\\.jenkins\\tools\\io.jenkins.plugins.dotnet.DotNetSDK\\dotnet'
-
-            // Download Puppeteer-Sharp DLL
-            bat "${dotnetPath} add package PuppeteerSharp --version 7.0.13 --package-directory .\\packages"
-
-            writeFile file: 'capture.cs', text: """
-                using PuppeteerSharp;
-
-                class Program
-                {
-                    static async Task Main()
-                    {
-                        var browser = await Puppeteer.LaunchAsync();
-                        var page = await browser.NewPageAsync();
-                        await page.GoToAsync('${grafanaUrl}');
-                        await page.ScreenshotAsync('grafana_screenshot.png');
-                        await browser.CloseAsync();
-                    }
-                }
-            """
-
-            // Compile and run the capture script
-            bat "${dotnetPath} build"
-            bat "${dotnetPath} run"
-        }
-    }
-}
+	
 		stage('Publish HTML Report') {
             steps {
                 script {
@@ -77,10 +45,35 @@ pipeline {
                     reportFiles: 'summary.html', // Specify the main HTML file to display
                     reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users"
                 ])
-		// Archive the Grafana screenshot as a Jenkins artifact
-                    archiveArtifacts artifacts: 'grafana_screenshot.png', onlyIfSuccessful: false
+		
             }
             }
         }
+		
+		stage('Grafana Dashboard Link') {
+    	steps {
+        script {
+            // grafana url for aggregate dashboard - replace time stamp with %s
+            def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
+            //def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
+
+            // get build start and end time
+            def start = currentBuild.startTimeInMillis
+            def end = start + currentBuild.duration
+
+            // replace time
+            perfResult = String.format(perfResult, start, end)
+           // jmxMonitor = String.format(jmxMonitor, start, end)
+
+            // build the string to be added as description.
+            def link = "<a href='%s'>Grafana Performance Result</a><br/>"
+            def sb = new StringBuilder()
+            sb.append(String.format(link, perfResult))
+
+            // set build description
+           currentBuild.setDescription(sb.toString())
+					}
+					}
+					}
     }
 }
