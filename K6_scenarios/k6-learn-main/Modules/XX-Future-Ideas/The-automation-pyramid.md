@@ -1,8 +1,0 @@
-- What is the pyramid?  
-- Past and present (Monolyth, ice-cream, modern)  
-- Tiers  
-- Unit  
-- Service  
-- Front end  
-- How tools map on tiers  
-- How perf tests map on tiers

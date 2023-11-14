@@ -1,3 +1,0 @@
-- What is a performance test case  
-- Types of performance test cases  
-- Differences with other test cases
