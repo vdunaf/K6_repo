@@ -70,7 +70,7 @@ stage('Grafana Dashboard Links') {
                     echo "Grafana Performance Result: ${perfResult}"
 
                     // Set the link as an environment variable for the HTML Publisher Plugin
-                    env.GRAFANA_LINK = ${perfResult}
+                    env.GRAFANA_LINK = perfResult
                 }
             }
         }
@@ -78,6 +78,23 @@ stage('Grafana Dashboard Links') {
 
     post {
         always {
+		steps {
+                script {
+                    // grafana url for aggregate dashboard - replace time stamp with %s
+                    def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
+                    
+                    // get build start and end time
+                    def start = currentBuild.startTimeInMillis
+                    def end = start + currentBuild.duration
+
+                    // replace time
+                    perfResult = String.format(perfResult, start, end)
+
+                    // Print the link in the build log
+                    echo "Grafana Performance Result: ${perfResult}"
+
+                    // Set the link as an environment variable for the HTML Publisher Plugin
+                    env.GRAFANA_LINK = perfResult
             // Publish HTML report with a link to Grafana
             publishHTML(
                 allowMissing: true,
@@ -85,8 +102,8 @@ stage('Grafana Dashboard Links') {
                 keepAll: true,
                 reportDir: '.',
                 reportFiles: 'summary.html', // Specify the main HTML file to display
-                reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users",
-                link: env.GRAFANA_LINK // Use the environment variable for the link
+                reportName: "Grafana Dashboard ${perfResult}for current build",
+
             )
         }
     }
