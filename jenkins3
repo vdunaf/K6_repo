@@ -3,7 +3,7 @@ pipeline {
 	parameters {
         choice choices: ['LoadTest', 'StressTest', 'EnduranceTest', 'BaselineTest', 'LoadTest_MainFlows', 'ScriptVerification_SmokeTest'], description: 'Type of Test To Be Executed', name: 'Type_of_API_test'
         string defaultValue: '1', description: 'Number of virtual users', name: 'VU1'
-        string defaultValue: '60', description: 'Duration(seconds)', name: 'DURATION'
+        string defaultValue: '30', description: 'Duration(seconds)', name: 'DURATION'
 	//string defaultValue: '1', description: 'Iterations', name: 'ITERATIONS'
 	choice(choices: ['test5.js', 'test4.js'], description: 'Select a test', name: 'scenario')
 		}
