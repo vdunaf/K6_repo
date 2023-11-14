@@ -86,7 +86,7 @@ stage('Grafana Dashboard Links') {
                 reportDir: '.',
                 reportFiles: 'summary.html', // Specify the main HTML file to display
                 reportName: "${formattedTimestamp} ${reportName} HTML Report with ${VU1} users",
-                link: env.GRAFANA_LINK // Use the environment variable for the link
+                linkHTML: env.GRAFANA_LINK // Use the environment variable for the link
             )
         }
     }
