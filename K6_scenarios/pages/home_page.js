@@ -23,8 +23,8 @@ export function HomePage() {
     check(response, { 'status equals 200': (r) => r.status === 200 });
     console.log(response.body); // Print the response body
 
-    match = new RegExp('category&amp;path=(\\d+)"').exec(response.body);
-    vars['category1'] = match ? match[1] || match[0] : null;
+    // match = new RegExp('category&amp;path=(\\d+)"').exec(response.body);
+    // vars['category1'] = match ? match[1] || match[0] : null;
 
     sleep(5);
   });
