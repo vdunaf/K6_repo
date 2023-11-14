@@ -54,7 +54,7 @@ pipeline {
     	steps {
         script {
             // grafana url for aggregate dashboard - replace time stamp with %s
-            def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-maxmount=%2F&var-env=&var-name=&from=%d&to=%d"
+            def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&var-node=All&var-env=&var-name=&from=%d&to=%d"
             def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
 
             // get build start and end time
