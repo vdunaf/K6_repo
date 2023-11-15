@@ -66,7 +66,7 @@ pipeline {
            // jmxMonitor = String.format(jmxMonitor, start, end)
 
             // build the string to be added as description.
-            def link = "<a href='%s'>Grafana Performance Result</a><br/>"
+            def link = "<a href='%s'>Grafana Dashboard</a><br/>"
             def sb = new StringBuilder()
             sb.append(String.format(link, perfResult))
 
