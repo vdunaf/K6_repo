@@ -10,7 +10,7 @@ const { main_header, main_Page } = Parameters();
 group (  'Open shopping cart', function (){
 // Open shopping cart
       response = http.get(
-        '${main_Page}=common/cart/info',
+        `${main_Page}=common/cart/info`,
         {
           headers: main_header,
         }
