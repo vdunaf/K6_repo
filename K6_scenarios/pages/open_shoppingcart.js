@@ -17,7 +17,6 @@ group (  'Open shopping cart', function (){
       )
       check(response, {
         'status equals 200': response => response.status.toString() === '200',
-//        'body contains shopping cart': response => response.body.includes('shopping cart'),
       })
       sleep(9.1)
     });
