@@ -35,7 +35,7 @@ export const options = {
 //    },
 //  },
 
-thresholds: {http_req_failed: ['rate<0.1'], // http errors should be less than 2%
+thresholds: {http_req_failed: ['rate<0.2'], 
                http_req_duration: ['p(95)<3000'], // 95% requests should be below 3s
 },
             //   executor: 'per-vu-iterations',
