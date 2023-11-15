@@ -1,15 +1,10 @@
 import http from 'k6/http';
 import { check, sleep, group, } from 'k6';
 import { FormData } from 'https://jslib.k6.io/formdata/0.0.2/index.js';
-//import { SharedArray } from 'k6/data';
-
-//// Load CSV file and parse it using Papa Parse
-//const csvRead = new SharedArray('credentials', function () {
-//  return papaparse.parse(open('./data.csv'), { header: true }).data;
-//
-//});
+import {Parameters} from './parameters.js';
 
 export function LoginUser3(randomUser) {
+  const { main_header, main_Page } = Parameters();
   group('Login account', function () {
     // Login
     const formData = new FormData();
@@ -18,7 +13,7 @@ export function LoginUser3(randomUser) {
     formData.append('password', randomUser.password); // Assuming your CSV has a 'password' field
 
     const response = http.post(
-      'http://172.23.176.132/opencart/upload/index.php?route=account/login',
+      `${main_Page}=account/login`,
       formData.body(),
       {
         headers: {
@@ -27,9 +22,11 @@ export function LoginUser3(randomUser) {
           'accept-language': 'en-US,en;q=0.5',
           'accept-encoding': 'gzip, deflate',
           'content-type': `multipart/form-data; boundary=${formData.boundary}`,
+//          'Content-Type': 'application/x-www-form-urlencoded',
           origin: 'http://172.23.176.132',
           connection: 'keep-alive',
           'upgrade-insecure-requests': '1',
+
         },
       }
     );
