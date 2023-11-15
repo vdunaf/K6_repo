@@ -9,7 +9,7 @@ let address, match, response;
 const { main_header, main_Page } = Parameters();
 
 group(
-    `Open a product - ${main_Page}=product/product&path=${category1}&product_id=${vars['product1']}`,
+    `Open a product - ${vars['product1']}`,
     function () {
       // open_product
       address = new URL(
