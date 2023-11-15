@@ -52,7 +52,7 @@ pipeline {
 		stage('Grafana Dashboard Link') {
     	steps {
         script {
-            // grafana url for aggregate dashboard - replace time stamp with %s
+            // grafana url for aggregate dashboard
             def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
             
             // get build start and end time
