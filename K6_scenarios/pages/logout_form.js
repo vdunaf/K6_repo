@@ -9,7 +9,7 @@ const { main_header, main_Page } = Parameters();
 group(
     'Logout',
     function () {
-      response = ${main_Page}route=account/logout', {
+      response = ${main_Page}=account/logout', {
        headers: main_header,
       })
       check(response, { 'status equals 200': response => response.status.toString() === '200' })
