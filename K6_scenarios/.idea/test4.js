@@ -38,7 +38,8 @@ thresholds: {http_req_failed: ['rate<0.02'], // http errors should be less than 
 },
             //   executor: 'per-vu-iterations',
                vus: 5,
-               iterations: 5,
+               duration: '30s'
+             //  iterations: 5,
                //maxDuration: '60s',
    };
 
