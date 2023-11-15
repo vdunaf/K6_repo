@@ -15,9 +15,9 @@ import {RemoveProduct} from "../pages/remove_product.js";
 import {Logout} from "../pages/logout_form.js";
 import {LoginUser3} from "../pages/login_user3.js";
 
-//********************************************************
+
 //Scenario: Add product to wish list and remove
-//#########################################################
+
 
 export const options = {
 
