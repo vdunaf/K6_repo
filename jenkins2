@@ -20,8 +20,7 @@ pipeline {
                  //   bat 'k6 run --vus %VU1% --duration %DURATION%s --out influxdb=http://localhost:8086/mydb K6_scenarios\\.idea\\%scenario%'
 		bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\%scenario%'
                 //    bat 'k6 run --vus %VU1% --duration %DURATION%s K6_scenarios\\.idea\\test4.js'
-                    // Generate HTML report from JSON
-                //   bat 'k6 report -o summaryy.html summaryy.json'
+                   
             }
         }
 	
@@ -55,16 +54,14 @@ pipeline {
         script {
             // grafana url for aggregate dashboard - replace time stamp with %s
             def perfResult = "http://172.23.176.156:3000/d/hb7fSE0Zz/testlab-opencart-monitoring?orgId=1&var-job=perf_opencart_1&var-hostname=All&from=%d&to=%d"
-            //def jmxMonitor = "http://172.23.176.156:3000/dashboard/db/jmx-monitor?from=%s&to=%s"
-
+            
             // get build start and end time
             def start = currentBuild.startTimeInMillis
             def end = start + currentBuild.duration
 
             // replace time
             perfResult = String.format(perfResult, start, end)
-           // jmxMonitor = String.format(jmxMonitor, start, end)
-
+          
             // build the string to be added as description.
             def link = "<a href='%s'>Grafana Dashboard</a><br/>"
             def sb = new StringBuilder()
