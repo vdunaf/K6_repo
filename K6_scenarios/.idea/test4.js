@@ -23,6 +23,9 @@ import {Logout} from "../pages/logout_form.js";
 //import {LoginUser2} from "../pages/login_user2.js";
 import {LoginUser3} from "../pages/login_user3.js";
 
+################################################################
+// Add product to wish list and remove
+################################################################
 
 export const options = {
 //  ext: {
@@ -31,17 +34,14 @@ export const options = {
 //      apm: [],
 //    },
 //  },
-//    duration: '2m',
-//    vus: 3,
+
 thresholds: {http_req_failed: ['rate<0.02'], // http errors should be less than 2%
                http_req_duration: ['p(95)<3000'], // 95% requests should be below 3s
 },
             //   executor: 'per-vu-iterations',
                vus: 5,
                duration: '30s'
-             //  iterations: 5,
-               //maxDuration: '60s',
-   };
+                };
 
 // Load CSV file and parse it using Papa Parse
 const accounts = new SharedArray('accounts', function () {
