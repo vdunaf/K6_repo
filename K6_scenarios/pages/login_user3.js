@@ -6,13 +6,17 @@ import {Parameters} from './parameters.js';
 export function LoginUser3(randomUser) {
   const { main_header, main_Page } = Parameters();
   group('Login account', function () {
+    const maxRetries = 3;
+    let retryCount = 0;
+    let response; // Define response outside the while loop
     // Login
+    while (retryCount < maxRetries) {
     const formData = new FormData();
     formData.boundary = '---------------------------35179360043200327002197957960';
     formData.append('email', randomUser.username); // Assuming your CSV has an 'email' field
     formData.append('password', randomUser.password); // Assuming your CSV has a 'password' field
 
-    const response = http.post(
+    response = http.post(
       `${main_Page}=account/login`,
       formData.body(),
       {
@@ -30,7 +34,14 @@ export function LoginUser3(randomUser) {
         },
       }
     );
+    if (response.status === 200 && response.body.includes('Edit your account information')) {
+        // Successful response, break out of the loop
+        break;
+      }
 
+      retryCount++;
+      sleep(1);
+    }
     check(response, {
           'status equals 200': (response) => response.status === 200,
           'body contains Edit your account information': (response) =>
