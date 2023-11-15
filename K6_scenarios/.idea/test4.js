@@ -23,9 +23,9 @@ import {Logout} from "../pages/logout_form.js";
 //import {LoginUser2} from "../pages/login_user2.js";
 import {LoginUser3} from "../pages/login_user3.js";
 
-################################################################
-// Add product to wish list and remove
-################################################################
+//################################################################
+// Scenario: Add a product to cart and checkout 
+//################################################################
 
 export const options = {
 //  ext: {
