@@ -25,8 +25,6 @@ export const options = {
              //  executor: 'per-vu-iterations',
                vus: 5,
                duration: '30s',
-              // iterations: 25,
-             //  maxDuration: '60s',
    };
 
 // Load CSV file and parse it using Papa Parse
