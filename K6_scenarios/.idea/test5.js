@@ -22,10 +22,11 @@ export const options = {
   thresholds: {http_req_failed: ['rate<0.02'], // http errors should be less than 2%
                http_req_duration: ['p(95)<3000'], // 95% requests should be below 3s
 },
-               executor: 'per-vu-iterations',
+             //  executor: 'per-vu-iterations',
                vus: 5,
-               iterations: 25,
-               maxDuration: '60s',
+               duration: '30s',
+              // iterations: 25,
+             //  maxDuration: '60s',
    };
 
 // Load CSV file and parse it using Papa Parse
