@@ -10,7 +10,7 @@ import { FormData } from 'https://jslib.k6.io/formdata/0.0.2/index.js';
 //});
 
 export function LoginUser3(randomUser) {
-  group('Login - http://172.23.176.132/opencart/upload/index.php?route=account/login', function () {
+  group('Login account', function () {
     // Login
     const formData = new FormData();
     formData.boundary = '---------------------------35179360043200327002197957960';
