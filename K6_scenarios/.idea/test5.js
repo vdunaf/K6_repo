@@ -23,8 +23,8 @@ export const options = {
                http_req_duration: ['p(95)<3000'], // 95% requests should be below 3s
 },
               executor: 'per-vu-iterations',
-               vus: 5,
-               duration: '30s',
+               vus: 1,
+               duration: '60s',
    };
 
 // Load CSV file and parse it using Papa Parse
