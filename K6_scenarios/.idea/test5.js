@@ -58,7 +58,7 @@ console.log(`Selected category ID: ${selectedCategory1}`);
 
 // Login to OpenCart
   LoginUser3(randomUser);
-
+  sleep(4.1)
   OpenCategory(selectedCategory1, vars);
    // Log product1 to check its value
   console.log('product1:', vars['product1']);
